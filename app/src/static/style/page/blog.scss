@@ -1,0 +1,127 @@
+@import "../partials/base";
+.blog-page{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  .main-header{
+    display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    li{
+      background: #f2f5f8;
+      border-radius: 3px;
+      margin: 0 15px 10px 0;
+      padding: 0 15px;
+      height: 30px;
+      line-height: 30px;
+      a{
+        color: #849aa4;
+        font-size: 16px;
+        font-family: 'microsoft yahei';
+      }
+    }
+    li.active{
+      background: $background-color;
+      a{
+        color: #fff;
+      }
+    }
+  }
+  .main-content{
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      .cont-header{
+          flex: 0 0 48px;
+          background: #f9fafc;
+          color: #a3b4bc;
+          border-top:1px solid $border-color;
+          border-bottom: 1px solid $border-color;
+          line-height: 46px;
+      }
+      .cont-list{
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: auto;
+      }
+      .cont-footer{
+          flex: 0 0 70px;
+          display: flex;
+          align-items: center;
+          padding: 0 10px;
+          border-top:1px solid $border-color;
+      }
+  }
+}
+
+.cont-item {
+    padding: 0 70px;
+    line-height: 69px;
+    border-bottom: 1px solid $border-color;
+    flex: 0 0 69px;
+    display: flex;
+    align-items: center;
+    .item-left{
+        flex-grow: 1;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        a{
+            display: block;
+            cursor: pointer;
+        }
+    }
+    .item-right{
+        flex: 0 0 120px;
+        text-align: right;
+        color: #a3b4bc;
+    }
+}
+.cont-footer{
+    .search{
+        flex-grow: 1;
+        margin-right: 30px;
+        position: relative;
+        input{
+            width: 100%;
+            border: 1px solid $border-color;
+            border-radius: 5px;
+            height: 46px;
+            line-height: 44px;
+            padding: 15px 30px 15px 15px;
+        }
+        .icon{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 22px;
+            color: #808080;
+            cursor: pointer;
+        }
+    }
+    .paging{
+        flex: 0 0 300px;
+        text-align: center;
+        .prev, .next{
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 38px;
+            border:2px solid $border-color;
+            vertical-align: middle;
+            cursor: pointer;
+            margin: 0 3px;
+            .icon{
+                font-size: 22px;
+                color: #808080;
+            }
+        }
+        span{
+            margin: 0 5px;
+            font-size: $base-font-size;
+        }
+    }
+}

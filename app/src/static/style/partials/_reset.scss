@@ -1,0 +1,50 @@
+html, body, div, article, aside, canvas, section,
+ul, ol, li, dl, dt, dd, a, p, span, footer, header, menu,
+form, input, select, textarea, button, option, iframe,
+h1, h2, h3, h4, h5, h6, img, table, tbody, thead, tr,
+td ,th, tfoot{
+  margin: 0;
+  padding: 0;
+  border:none;
+  box-sizing: border-box;
+}
+
+body,a,input,button,textarea,select{
+  font-family: $base-font-family;
+}
+
+article, aside, details, figcaption, figure, footer, header, menu, nav, section{
+  display:block;
+}
+
+body{
+  line-height: $base-line-height;
+  font-size: $base-font-size;
+}
+
+a{
+  text-decoration: none;
+  color: $base-font-color;
+}
+
+img{
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+ol, ul{
+  list-style:none;
+}
+
+blockquote, q{
+  quotes:none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after{
+  content:none;
+}
+
+table{
+  border-collapse:collapse;
+  border-spacing:0;
+}
