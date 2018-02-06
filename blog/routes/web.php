@@ -14,6 +14,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->get('hello/{string}', [
-    'uses' => 'ExampleController@hello'
-]);
+//$router->post('hello/{string}', 'ExampleController@hello');
+//$router->post('hello/{string}', 'ExampleController@hello');
+$router->post('article/add', 'ArticleController@add');
+
+$router->post('article_category/add', 'ArticleCategoryController@add');
+$router->put('article_category/edit/{id}', 'ArticleCategoryController@edit');
+$router->delete('article_category/del/{id}', 'ArticleCategoryController@del');
+$router->get('article_category/all', 'ArticleCategoryController@all');
