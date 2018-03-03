@@ -13,12 +13,18 @@ class ArticleModel extends Model{
      * 表名
      * @var string
      */
-    protected $table = 'article';
+    protected $table = 'articles';
     /**
      * 主键类型String
      * @var
      */
     protected $keyType = 'string';
+    /**
+     * 该模型是否被自动维护时间戳
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * 添加文章

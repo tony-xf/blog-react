@@ -6,7 +6,7 @@ use App\Models\ArticleModel;
 use Illuminate\Http\Request;
 use App\Tools;
 
-class ExampleController extends Controller
+class ArticleController extends Controller
 {
     protected $tools = null;
     protected $article = null;
@@ -28,20 +28,39 @@ class ExampleController extends Controller
      * @return array
      */
     public function add(Request $request){
+        $this->validate($request, [
+            'title' => 'required',
+            'category_id' => 'required'
+        ]);
+
         $uuid = $this->tools->uuid();
         $now = $_SERVER['REQUEST_TIME'];
-        $res = $this->article->insert(array(
-            'id' => $uuid,
-            'title' => $request['title'],
-            'author' => $request['author'],
-            'category_id' => $request['category_id'],
-            'clicks' => 0,
-            'intro' => $request['intro'],
-            'comment_id' => $request['comment_id'],
-            'detail' => $request['detail'],
-            'created_at' => $now,
-            'updated_at' => $now
-        ));
+        $title = $request->input('title', '');
+        $category_id = $request->input('category_id', '');
+        if(empty($title)){
+            return array(
+                'success' => false,
+                'msg' => '标题不能为空'
+            );
+        }
+        if(empty($category_id)){
+            return array(
+                'success' => false,
+                'msg' => '分类不能为空'
+            );
+        }
+        $this->article->id = $uuid;
+        $this->article->title = $title;
+        $this->article->author = $request->input('author', '');
+        $this->article->category_id = $category_id;
+        $this->article->clicks = 0;
+        $this->article->intro = $request->input('intro', '');
+        $this->article->comment_id = $request->input('comment_id', '');
+        $this->article->detail = $request->input('detail', '');
+        $this->article->created_at = $now;
+        $this->article->updated_at = $now;
+
+        $res = $this->article->save();
         if($res){
             $resp = array(
                 'success' => $res,

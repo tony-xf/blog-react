@@ -40,7 +40,9 @@
     "yallist": "^3.0.2"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "element-ui": "^2.1.0",
+    "marked": "^0.3.17",
     "mavon-editor": "^2.4.16",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1",

@@ -9,11 +9,10 @@
             </el-form-item>
             <el-form-item label="文章分类" prop="category_id">
                 <el-select v-model="editForm.category_id" placeholder="请选择文章分类">
-                    <el-option label="区域一" value="shanghai"></el-option>
-                    <el-option label="区域二" value="beijing"></el-option>
+                    <el-option :label="item.name" :value="item.id" v-for="item in categoryOptions"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="活动形式" prop="intro">
+            <el-form-item label="文章简介" prop="intro">
                 <el-input type="textarea" v-model="editForm.intro"></el-input>
             </el-form-item>
             <el-form-item prop="detail">
@@ -29,7 +28,8 @@
 <script>
     import Vue from 'vue';
     import {Form, FormItem, Input, Button, Select, Option} from 'element-ui'
-    var mavonEditor = require('mavon-editor');
+    import axios from 'axios';
+    const mavonEditor = require('mavon-editor');
     import 'mavon-editor/dist/css/index.css'
     Vue.use(Form)
     Vue.use(FormItem)
@@ -38,8 +38,8 @@
     Vue.use(Select)
     Vue.use(Option)
     export default {
-        components: {
-            'mavon-editor': mavonEditor.mavonEditor
+        components:{
+            'mavon-editor': mavonEditor['mavon-editor'].mavonEditor
         },
         data() {
             return {
@@ -50,6 +50,7 @@
                     intro: '',
                     detail:''
                 },
+                categoryOptions:[],
                 rules: {
                     title: [
                         { required: true, message: '请输入文章标题', trigger: 'blur' },
@@ -62,18 +63,32 @@
         },
         methods: {
             submitForm(formName) {
+                console.log(this.editForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        axios.post('http://homestead.test/article/add',this.editForm).then((response)=>{
+                            console.log(response);
+                        }).catch((response)=>{
+                            console.log(response)
+                        })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            getCategory(){
+                axios.get('http://homestead.test/article_category/all').then((response)=>{
+                    this.categoryOptions = response.data;
+                }).catch((response)=>{
+                    console.log(response)
+                })
             }
+        },
+        mounted(){
+            this.getCategory();
         }
     }
 </script>

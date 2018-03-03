@@ -34,8 +34,8 @@ class ArticleCategoryController extends Controller{
         $uuid = $this->tools->uuid();
         $now = $_SERVER['REQUEST_TIME'];
         $this->articleCategory->id =  $uuid;
-        $this->articleCategory->name =  $request['name'];
-        $this->articleCategory->p_id =  $request['p_id'];
+        $this->articleCategory->name =  $request->input('name', '');
+        $this->articleCategory->p_id =  $request->input('p_id', '');
         $this->articleCategory->created_at =  $now;
         $this->articleCategory->updated_at =  $now;
         $res = $this->articleCategory->save();
@@ -92,8 +92,8 @@ class ArticleCategoryController extends Controller{
      */
     public function edit($id, Request $request){
         $category = \App\Models\ArticleCategoryModel::find($id);
-        $category->name = $request['name'];
-        $category->p_id = $request['p_id'];
+        $category->name = $request->input('name', '');
+        $category->p_id = $request->input('p_id', '');
         $res = $category->save();
         if($res){
             $resp = array(
