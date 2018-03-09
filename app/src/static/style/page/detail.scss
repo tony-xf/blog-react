@@ -1,0 +1,20 @@
+@import "../partials/base";
+.article-page{
+    width: 100%;
+    .main-header{
+        height: 70px;
+    }
+    .main-content{
+        .info{
+            height: 48px;
+            background: #f9fafc;
+            color: #a3b4bc;
+            border-top:1px solid $border-color;
+            border-bottom: 1px solid $border-color;
+            line-height: 46px;
+        }
+        .detail{
+            padding: 20px 70px;
+        }
+    }
+}

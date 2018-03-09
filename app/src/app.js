@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Side from './component/Side';
 import Blog from './component/Blog';
-
+import Article from './component/blog/Detail';
 const About = () => (
     <div>
         <h2>About</h2>
@@ -56,7 +56,7 @@ export default class App extends React.Component{
                     <div className="main">
                         <Route exact path="/" component={Blog}/>
                         <Route path="/about" component={About}/>
-                        <Route path="/topics" component={Topics}/>
+                        <Route path="/article/:articleId" component={Article}/>
                     </div>
                 </div>
             </Router>

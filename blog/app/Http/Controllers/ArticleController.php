@@ -89,4 +89,16 @@ class ArticleController extends Controller
         }
         return $list;
     }
+
+    /**
+     * 获取文章信息
+     * @param $id
+     * @return mixed
+     */
+    public function get($id){
+        $article = \App\Models\ArticleModel::find($id);
+        $info = $article->toArray();
+        $info['time'] = date('Y-m-d H:i:s', $info['updated_at']);
+        return $info;
+    }
 }

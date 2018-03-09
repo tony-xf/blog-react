@@ -69,7 +69,7 @@ class Home extends React.Component{
                     <ul className="cont-list">
                         {this.state.list.map((item)=>{
                             return <li className="cont-item" key="{item.id}">
-                                <span className="item-left"><a>{item.title}</a></span>
+                                <span className="item-left"><Link to={`${match.url}article/${item.id}`}>{item.title}</Link></span>
                                 <span className="item-right">{item.date}</span>
                             </li>
                         })}
