@@ -1,13 +1,53 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import '../static/style/page/blog.scss';
 
 class Home extends React.Component{
     constructor(props){
         super(props);
+        this.state={
+            page: 1,
+            pageSize: 15,
+            total: 0 ,
+            list: [],
+            size: 0,
+            loading: false
+        }
     }
     componentDidMount(){
         console.log(this.props);
+        this.getArticleList();
+    }
+    getArticleList = () =>{
+        const num = Math.ceil(this.state.total/this.state.pageSize);
+        this.setState({loading: true});
+        axios.get('http://homestead.test/article/all',{
+            page: this.state.page,
+            pageSize: this.state.pageSize
+        }).then(({data})=>{
+            this.setState({list:data.data, total: data.total, size: num, loading: false});
+        }).catch(()=>{
+            this.setState({loading: false});
+        });
+    }
+    handlePrev = () =>{
+        if(!this.state.loading){
+            return;
+        }
+        if(this.state.page > 1){
+            this.setState({page: this.state.page-1});
+            this.getArticleList();
+        }
+    }
+    handleNext = () =>{
+        if(!this.state.loading){
+            return;
+        }
+        if(this.state.page < this.state.size){
+            this.setState({page: this.state.page+1});
+            this.getArticleList();
+        }
     }
     render(){
         const match = this.props.match;
@@ -27,18 +67,12 @@ class Home extends React.Component{
                         <span className="item-right">发表时间</span>
                     </div>
                     <ul className="cont-list">
-                        <li className="cont-item">
-                            <span className="item-left"><a>响应式布局方案</a></span>
-                            <span className="item-right">2017-12-19 23:05</span>
-                        </li>
-                        <li className="cont-item">
-                            <span className="item-left"><a>响应式布局方案</a></span>
-                            <span className="item-right">2017-12-19 23:05</span>
-                        </li>
-                        <li className="cont-item">
-                            <span className="item-left"><a>响应式布局方案</a></span>
-                            <span className="item-right">2017-12-19 23:05</span>
-                        </li>
+                        {this.state.list.map((item)=>{
+                            return <li className="cont-item" key="{item.id}">
+                                <span className="item-left"><a>{item.title}</a></span>
+                                <span className="item-right">{item.date}</span>
+                            </li>
+                        })}
                     </ul>
                     <div className="cont-footer">
                         <div className="search">
@@ -46,10 +80,10 @@ class Home extends React.Component{
                             <i className="icon icon-enter"></i>
                         </div>
                         <div className="paging">
-                            <span>共2条</span>
-                            <a className="prev"><i className="icon icon-radius-arrow-left"></i></a>
-                            <span>1</span> / <span>1</span>
-                            <a className="next"><i className="icon icon-radius-arrow-right"></i></a>
+                            <span>共{this.state.total}条</span>
+                            <a className="prev" onClick={this.handlePrev}><i className="icon icon-radius-arrow-left"></i></a>
+                            <span>{this.state.page}</span> / <span>{Math.ceil(this.state.total/this.state.pageSize)}</span>
+                            <a className="next" onClick={this.handleNext}><i className="icon icon-radius-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>

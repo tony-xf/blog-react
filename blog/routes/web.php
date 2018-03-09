@@ -17,6 +17,7 @@ $router->get('/', function () use ($router) {
 //$router->post('hello/{string}', 'ExampleController@hello');
 //$router->post('hello/{string}', 'ExampleController@hello');
 $router->post('article/add', 'ArticleController@add');
+$router->get('article/all', 'ArticleController@all');
 
 $router->post('article_category/add', 'ArticleCategoryController@add');
 $router->put('article_category/edit/{id}', 'ArticleCategoryController@edit');

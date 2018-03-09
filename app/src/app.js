@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Side from './component/Side';
 import Blog from './component/Blog';
 
-
 const About = () => (
     <div>
         <h2>About</h2>

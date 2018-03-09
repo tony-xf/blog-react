@@ -18,7 +18,7 @@ class Side extends React.Component{
                 </div>
                 <ul className="nav">
                     <li className="active"><Link to="/">个人博客</Link></li>
-                    <li><Link to="/">关于我</Link></li>
+                    <li><Link to="/about">关于我</Link></li>
                 </ul>
                 <div className="copy">
 

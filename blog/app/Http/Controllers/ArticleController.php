@@ -74,4 +74,19 @@ class ArticleController extends Controller
         }
         return $resp;
     }
+
+    /**
+     * 文章列表
+     * @return mixed
+     */
+    public function all(Request $request){
+        $page = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 10);
+        $article = \App\Models\ArticleModel::paginate($pageSize, ['id','title','updated_at'], null, $page);
+        $list = $article->toArray();
+        foreach ($list['data'] as &$val){
+            $val['date'] = date('Y-m-d H:i:s', $val['updated_at']);
+        }
+        return $list;
+    }
 }
