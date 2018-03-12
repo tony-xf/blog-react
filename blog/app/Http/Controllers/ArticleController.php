@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticleModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Tools;
 
 class ArticleController extends Controller
@@ -81,14 +82,28 @@ class ArticleController extends Controller
      */
     public function all(Request $request){
         $page = $request->input('page', 1);
+        $categoryId = $request->input('id', '');
+        $keywords = $request->input('keywords', '');
         $pageSize = $request->input('pageSize', 10);
-        $article = \App\Models\ArticleModel::paginate($pageSize, ['id','title','updated_at'], null, $page);
-        $list = $article->toArray();
+        $articleObj = DB::table('articles');
+        if(!empty($categoryId)){
+            $articleObj= $articleObj->where('category_id', $categoryId);
+        }
+        if(!empty($keywords)){
+            $articleObj = $articleObj->where('title', 'LIKE', $keywords);
+        }
+        $count =  $articleObj->count();
+        $article = $articleObj->orderBy('updated_at', 'desc')->simplePaginate($pageSize, ['id','title','updated_at'], null, $page);
+        $list = $article->toJson();
+        $list = json_decode($list, true);
+        $list['total'] = $count;
         foreach ($list['data'] as &$val){
             $val['date'] = date('Y-m-d H:i:s', $val['updated_at']);
         }
         return $list;
     }
+
+
 
     /**
      * 获取文章信息
@@ -98,6 +113,9 @@ class ArticleController extends Controller
     public function get($id){
         $article = \App\Models\ArticleModel::find($id);
         $info = $article->toArray();
+
+        $article->clicks = $info['clicks'] + 1;
+        $article->save();
         $info['time'] = date('Y-m-d H:i:s', $info['updated_at']);
         return $info;
     }

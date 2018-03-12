@@ -1,6 +1,6 @@
 import './static/style/common.scss';
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import Side from './component/Side';
 import Blog from './component/Blog';
 import Article from './component/blog/Detail';
