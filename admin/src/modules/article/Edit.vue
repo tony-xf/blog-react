@@ -9,7 +9,7 @@
             </el-form-item>
             <el-form-item label="文章分类" prop="category_id">
                 <el-select v-model="editForm.category_id" placeholder="请选择文章分类">
-                    <el-option :label="item.name" :value="item.id" v-for="item in categoryOptions"></el-option>
+                    <el-option :label="item.name" :key="item.id" :value="item.id" v-for="item in categoryOptions"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="文章简介" prop="intro">

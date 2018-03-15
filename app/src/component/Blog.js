@@ -33,7 +33,6 @@ class Home extends React.Component{
             }
         }).then(({data})=>{
             const num = Math.ceil(data.total/this.state.pageSize);
-            console.log(data.total);
             this.setState({list:data.data, total: data.total, size: num, loading: false});
         }).catch(()=>{
             this.setState({loading: false});
