@@ -9,7 +9,7 @@
              <div class="custom-tree-node" slot-scope="{ node, data }">
                  <div class="edit-form" v-if="data.isEdit">
                      <span class="label">
-                         <input v-model="editForm.name" placeholder="请输入分类名称"/>
+                         <input v-model="data.name" placeholder="请输入分类名称"/>
                      </span>
                      <span class="operation" v-if="data.isAdd">
                          <el-button
@@ -70,7 +70,7 @@
 </template>
 <script>
     import Vue from 'vue';
-    import {Form, FormItem, Input, Button, Select, Option, Tree, Dialog} from 'element-ui'
+    import {Form, FormItem, Input, Button, Select, Option, Tree, Dialog,Message, MessageBox} from 'element-ui'
     import { generateTree, findChild} from '../../util/tools'
     import axios from 'axios';
     Vue.use(Form)
@@ -81,37 +81,17 @@
     Vue.use(Option)
     Vue.use(Tree)
     Vue.use(Dialog)
+    Vue.prototype.$confirm = MessageBox.confirm;
+    Vue.prototype.$message = Message;
     export default {
         data() {
             return {
                 dialogTableVisible:false,
                 key: 1,
-                editForm: {
-                    name: '',
-                    category_id: '',
-                },
                 categoryOptions:[],
-                rules: {
-                    name: [
-                        { required: true, message: '请输入文章标题', trigger: 'blur' },
-                    ]
-                }
             };
         },
         methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        axios.post('http://homestead.test/article/add',this.editForm).then((response)=>{
-                            console.log(response);
-                        }).catch((response)=>{
-                            console.log(response)
-                        })
-                    } else {
-                        return false;
-                    }
-                });
-            },
             addChildren(data){
                 this.key++;
                 const newChild = { id: this.key, label: '', children: [], isEdit: true, isAdd: true, loading: false };
@@ -119,16 +99,16 @@
                     this.$set(data, 'children', []);
                 }
                 data.children.push(newChild);
+
             },
             showEditForm(data){ 
                 data.isEdit = true;
                 data.isAdd = false;
-                this.editForm.name = data.name;
             },
             saveEditNode(node, data){
                 const params = {
                     p_id: node.parent.data.id,
-                    name: this.editForm.name
+                    name: data.name
                 }
                 axios.put('http://homestead.test/article_category/edit/'+data.id,params).then((res)=>{
                     data.isEdit = false;
@@ -141,24 +121,27 @@
             saveAddNode(node, data){
                 const params = {
                     p_id: node.parent.data.id,
-                    name: this.editForm.name
+                    name: data.name
                 }
                 axios.post('http://homestead.test/article_category/add', params).then((res)=>{
                     data.isEdit = false;
-                    data.label = this.editForm.name;
-                    this.editForm.name='';
+                    data.label = data.name;
                 }).catch(()=>{
 
                 });
             },
             cancelEdit(node, data){
                 data.isEdit = false;
-                this.editForm.name='';
             },
             removeNode(node, data){
+
                 const parent = node.parent;
                 const children = parent.data.children || parent.data;
                 const index = children.findIndex(d => d.id === data.id);
+                if(data.children.length > 0){
+                    this.$message.error('该分类存在子分类，请先删除子分类');
+                    return false;
+                }
                 if(data.isAdd){
                     children.splice(index, 1);
                 }else{
@@ -168,9 +151,6 @@
 
                     });
                 }
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
             },
             getCategory(){
                 axios.get('http://homestead.test/article_category/all').then((response)=>{
