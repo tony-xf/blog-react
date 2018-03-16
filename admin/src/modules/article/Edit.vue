@@ -16,7 +16,7 @@
                 <el-input type="textarea" v-model="editForm.intro"></el-input>
             </el-form-item>
             <el-form-item prop="detail">
-                <mavon-editor v-model="editForm.detail"></mavon-editor>
+                <mavon-editor ref="me" v-model="editForm.detail" @imgAdd="imgAdd" @imgDel="imgDel"></mavon-editor>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm('editForm')">添加</el-button>
@@ -30,6 +30,7 @@
     import {Form, FormItem, Input, Button, Select, Option} from 'element-ui'
     import axios from 'axios';
     const mavonEditor = require('mavon-editor');
+    const qiniu = require('qiniu-js');
     import 'mavon-editor/dist/css/index.css'
     Vue.use(Form)
     Vue.use(FormItem)
@@ -50,6 +51,7 @@
                     intro: '',
                     detail:''
                 },
+                token:'',
                 categoryOptions:[],
                 rules: {
                     title: [
@@ -63,7 +65,6 @@
         },
         methods: {
             submitForm(formName) {
-                console.log(this.editForm)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         axios.post('http://homestead.test/article/add',this.editForm).then((response)=>{
@@ -79,9 +80,47 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
+            imgAdd(pos, file){
+                console.log(file);
+                console.log(pos);
+                const key = file.name;
+                const putExtra = {
+                    mimeType: null
+                };
+                const config = {
+                };
+                const observable = qiniu.upload(file.miniurl, key, this.token, putExtra, config)
+                observable.subscribe({
+                    next(res){
+                        console.log('--------next')
+                        console.log(res)
+                        // ...
+                    },
+                    error(err){
+                        console.log('--------error')
+                        console.log(err)
+                        // ...
+                    },
+                    complete(res){
+                        console.log('--------complete')
+                        console.log(res)
+                        //this.$refs.me.img2Url(pos)
+                    }
+                })
+            },
+            imgDel(){
+
+            },
             getCategory(){
                 axios.get('http://homestead.test/article_category/all').then((response)=>{
                     this.categoryOptions = response.data;
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            },
+            getToken(){
+                axios.get('http://homestead.test/qiniu/token').then(({data})=>{
+                    this.token = data;
                 }).catch((response)=>{
                     console.log(response)
                 })
@@ -89,6 +128,7 @@
         },
         mounted(){
             this.getCategory();
+            this.getToken();
         }
     }
 </script>

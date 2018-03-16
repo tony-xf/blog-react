@@ -16,6 +16,8 @@ $router->get('/', function () use ($router) {
 });
 //$router->post('hello/{string}', 'ExampleController@hello');
 //$router->post('hello/{string}', 'ExampleController@hello');
+$router->get('qiniu/token', 'QiNiuController@getToken');
+
 $router->post('article/add', 'ArticleController@add');
 $router->get('article/all', 'ArticleController@all');
 $router->get('article/detail/{id}', 'ArticleController@get');
