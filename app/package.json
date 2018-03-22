@@ -36,6 +36,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "marked": "^0.3.17",
+    "qiniu-js": "^2.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",

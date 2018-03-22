@@ -86,7 +86,7 @@ class ArticleController extends Controller
         $keywords = $request->input('keywords', '');
         $pageSize = $request->input('pageSize', 10);
         $articleObj = DB::table('articles');
-        if(!empty($categoryId)){
+        if(!empty($categoryId) && $categoryId != '32AB068B-DF66-3D59-47BC-10C5F0132D52'){
             $articleObj= $articleObj->where('category_id', $categoryId);
         }
         if(!empty($keywords)){
@@ -116,6 +116,9 @@ class ArticleController extends Controller
 
         $article->clicks = $info['clicks'] + 1;
         $article->save();
+        if(!empty($info['detail'])){
+
+        }
         $info['time'] = date('Y-m-d H:i:s', $info['updated_at']);
         return $info;
     }

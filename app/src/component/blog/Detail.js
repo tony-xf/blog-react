@@ -13,7 +13,7 @@ class Detail extends React.Component{
             clicks: ''
         }
     }
-    componentDidMount(){
+    componentWillMount (){
         const id = this.props.match.params.articleId;
         if(id){
             this.getArticle(id);
@@ -21,7 +21,12 @@ class Detail extends React.Component{
     }
     getArticle = (id) => {
         axios.get('http://homestead.test/article/detail/'+id).then(({data})=>{
-            this.setState({title: data.title, author: data.author, time: data.time, detail: data.detail, clicks: data.clicks});
+            this.setState({title: data.title, author: data.author, time: data.time, detail: data.detail, clicks: data.clicks},()=>{
+                const imgArr = this.refs.detail.querySelectorAll('img')
+                for(let i=0; i< imgArr.length; i++){
+                    console.log(imgArr[i].alt);
+                }
+            });
         }).catch(()=>{
 
         });
@@ -36,7 +41,7 @@ class Detail extends React.Component{
                     <span>点击量：{this.state.clicks}</span>
                     <span>更新时间：{this.state.time}</span>
                 </div>
-                <div className="detail" dangerouslySetInnerHTML={{__html:html}}>
+                <div className="detail" ref="detail" dangerouslySetInnerHTML={{__html:html}}>
                 </div>
             </div>
         </div>)

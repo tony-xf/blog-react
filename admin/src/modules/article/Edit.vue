@@ -31,6 +31,7 @@
     import axios from 'axios';
     const mavonEditor = require('mavon-editor');
     const qiniu = require('qiniu-js');
+    const cryptoJS = require('crypto-js');
     import 'mavon-editor/dist/css/index.css'
     Vue.use(Form)
     Vue.use(FormItem)
@@ -81,13 +82,14 @@
                 this.$refs[formName].resetFields();
             },
             imgAdd(pos, file){
-                const key = file.name;
+                const keyArr = file.name.split('.');
+                const key = this.s4()+Date.now()+this.s4()+'.'+keyArr[1];
                 const putExtra = {
                     mimeType: null
                 };
                 const config = {
                 };
-                const observable = qiniu.upload(file.miniurl, key, this.token, putExtra, config);
+                const observable = qiniu.upload(file.miniurl, file.name, this.token, putExtra, config);
                 const _this = this;
                 observable.subscribe({
                     next(res){
@@ -97,6 +99,7 @@
                         // ...
                     },
                     complete(res){
+                        _this.getUrl(pos,res.key);
                     }
                 })
             },
@@ -110,13 +113,24 @@
                     console.log(response)
                 })
             },
+            getUrl(pos, key){
+                axios.get('http://homestead.test/qiniu/url',{params: {key}}).then(({data})=>{
+                    this.$refs.me.$img2Url(pos, data.url);
+                }).catch((response)=>{
+                    console.log(response)
+                })
+            },
             getToken(){
                 axios.get('http://homestead.test/qiniu/token').then(({data})=>{
                     this.token = data;
                 }).catch((response)=>{
                     console.log(response)
                 })
+            },
+            s4(){
+                return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
             }
+
         },
         mounted(){
             this.getCategory();

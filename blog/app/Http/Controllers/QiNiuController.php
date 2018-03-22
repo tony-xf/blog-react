@@ -6,6 +6,7 @@
 namespace App\Http\Controllers;
 
 use Qiniu\Auth;
+use Illuminate\Http\Request;
 
 class QiNiuController extends Controller{
     protected $auth = null;
