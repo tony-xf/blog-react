@@ -81,30 +81,22 @@
                 this.$refs[formName].resetFields();
             },
             imgAdd(pos, file){
-                console.log(file);
-                console.log(pos);
                 const key = file.name;
                 const putExtra = {
                     mimeType: null
                 };
                 const config = {
                 };
-                const observable = qiniu.upload(file.miniurl, key, this.token, putExtra, config)
+                const observable = qiniu.upload(file.miniurl, key, this.token, putExtra, config);
+                const _this = this;
                 observable.subscribe({
                     next(res){
-                        console.log('--------next')
-                        console.log(res)
                         // ...
                     },
                     error(err){
-                        console.log('--------error')
-                        console.log(err)
                         // ...
                     },
                     complete(res){
-                        console.log('--------complete')
-                        console.log(res)
-                        //this.$refs.me.img2Url(pos)
                     }
                 })
             },
